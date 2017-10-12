@@ -3,7 +3,7 @@ output:
   html_document: default
 ---
 
-# Capstone Proposal 
+# Capstone Proposal
 ### 20 Years of IGN Game Reviews
 ##### By Ellen Savoye
 
