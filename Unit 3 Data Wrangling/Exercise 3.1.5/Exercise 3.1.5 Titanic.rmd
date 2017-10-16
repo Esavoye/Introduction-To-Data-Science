@@ -1,0 +1,38 @@
+---
+title: "Exercise 3.1.5 Titanic"
+output: html_notebook
+---
+
+##### *Dealing with missing values
+
+```{r load_libraries, echo=FALSE, include=FALSE}
+# Load libraries and read titanic CSV file
+
+library("dplyr")
+library("tidyr")
+
+titanic_data <- read.csv("titanic_original.csv")
+```
+
+```{r import_data}
+# Update blank cells in 'embarked' to 'S'
+
+titanic_data <- titanic_data %>% mutate(embarked = if_else(embarked == '', "S", as.character(embarked)))
+
+tbl_df(titanic_data)
+View(titanic_data)
+
+
+
+```
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
