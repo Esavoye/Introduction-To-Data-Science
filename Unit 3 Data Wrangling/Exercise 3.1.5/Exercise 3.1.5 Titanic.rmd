@@ -3,9 +3,9 @@ title: "Exercise 3.1.5 Titanic"
 output: html_notebook
 ---
 
-##### *Dealing with missing values
+##### *Dealing with missing values*
 
-```{r load_libraries, echo=FALSE, include=FALSE}
+```{r load_library_data, echo=FALSE, include=FALSE}
 # Load libraries and read titanic CSV file
 
 library("dplyr")
@@ -14,18 +14,36 @@ library("tidyr")
 titanic_data <- read.csv("titanic_original.csv")
 ```
 
-```{r import_data}
+
+**1: Port of embarkation**
+```{r fix_embark}
 # Update blank cells in 'embarked' to 'S'
 
 titanic_data <- titanic_data %>% mutate(embarked = if_else(embarked == '', "S", as.character(embarked)))
 
-tbl_df(titanic_data)
+```
+
+
+**2: Age**
+Based on the output below, we see that both the median and mean are 29.88. In addition, we can deduce that the min of 0.1667 and max of 80 are not realistic values based on the quartile output. Given that 50% of the values fall between ages 21 and 39, the average of 29.88 is the most logical choice. 
+```{r fix_age}
+# Fill in blank age cells with the mean of the age column 
+
+mean(titanic_data$age, na.rm = TRUE)
+median(titanic_data$age, na.rm = TRUE)
+min(titanic_data$age)
+max(titanic_data$age)
+quantile(titanic_data$age, na.rm = TRUE)
+
+titanic_age_mean <- mean(titanic_data$age, na.rm = TRUE)
+titanic_data <- titanic_data %>% mutate(age = if_else(age == '' | is.na(age) , titanic_age_mean, age))
+
+#tbl_df(titanic_data)
 View(titanic_data)
 
 
 
 ```
-
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
