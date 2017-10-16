@@ -188,54 +188,35 @@ titanic_data &lt;- titanic_data %&gt;% mutate(embarked = if_else(embarked == '',
 <p><strong>2: Age</strong> Based on the output below, we see that both the median and mean are 29.88. In addition, we can deduce that the min of 0.1667 and max of 80 are not realistic values based on the quartile output. Given that 50% of the values fall between ages 21 and 39, the average of 29.88 is the most logical choice.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBGaWxsIGluIGJsYW5rIGFnZSBjZWxscyB3aXRoIHRoZSBtZWFuIG9mIHRoZSBhZ2UgY29sdW1uIFxubWVhbih0aXRhbmljX2RhdGEkYWdlLCBuYS5ybSA9IFRSVUUpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBGaWxsIGluIGJsYW5rIGFnZSBjZWxscyB3aXRoIHRoZSBtZWFuIG9mIHRoZSBhZ2UgY29sdW1uIFxuXG5tZWFuKHRpdGFuaWNfZGF0YSRhZ2UsIG5hLnJtID0gVFJVRSlcbm1lZGlhbih0aXRhbmljX2RhdGEkYWdlLCBuYS5ybSA9IFRSVUUpXG5taW4odGl0YW5pY19kYXRhJGFnZSlcbm1heCh0aXRhbmljX2RhdGEkYWdlKVxucXVhbnRpbGUodGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKVxuXG50aXRhbmljX2FnZV9tZWFuIDwtIG1lYW4odGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKVxudGl0YW5pY19kYXRhIDwtIHRpdGFuaWNfZGF0YSAlPiUgbXV0YXRlKGFnZSA9IGlmX2Vsc2UoYWdlID09ICcnIHwgaXMubmEoYWdlKSAsIHRpdGFuaWNfYWdlX21lYW4sIGFnZSkpXG5cblxuYGBgIn0= -->
 <pre class="r"><code># Fill in blank age cells with the mean of the age column 
-mean(titanic_data$age, na.rm = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI5Ljg4MTEzXG4ifQ== -->
-<pre><code>[1] 29.88113</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVkaWFuKHRpdGFuaWNfZGF0YSRhZ2UsIG5hLnJtID0gVFJVRSlcbmBgYCJ9 -->
-<pre class="r"><code>median(titanic_data$age, na.rm = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDI4XG4ifQ== -->
-<pre><code>[1] 28</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWluKHRpdGFuaWNfZGF0YSRhZ2UpXG5gYGAifQ== -->
-<pre class="r"><code>min(titanic_data$age)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIE5BXG4ifQ== -->
-<pre><code>[1] NA</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWF4KHRpdGFuaWNfZGF0YSRhZ2UpXG5gYGAifQ== -->
-<pre class="r"><code>max(titanic_data$age)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIE5BXG4ifQ== -->
-<pre><code>[1] NA</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucXVhbnRpbGUodGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKVxuYGBgIn0= -->
-<pre class="r"><code>quantile(titanic_data$age, na.rm = TRUE)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAwJSAgICAgMjUlICAgICA1MCUgICAgIDc1JSAgICAxMDAlIFxuIDAuMTY2NyAyMS4wMDAwIDI4LjAwMDAgMzkuMDAwMCA4MC4wMDAwIFxuIn0= -->
-<pre><code>     0%     25%     50%     75%    100% 
- 0.1667 21.0000 28.0000 39.0000 80.0000 </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGl0YW5pY19hZ2VfbWVhbiA8LSBtZWFuKHRpdGFuaWNfZGF0YSRhZ2UsIG5hLnJtID0gVFJVRSlcbnRpdGFuaWNfZGF0YSA8LSB0aXRhbmljX2RhdGEgJT4lIG11dGF0ZShhZ2UgPSBpZl9lbHNlKGFnZSA9PSAnJyB8IGlzLm5hKGFnZSkgLCB0aXRhbmljX2FnZV9tZWFuLCBhZ2UpKVxuI3RibF9kZih0aXRhbmljX2RhdGEpXG5WaWV3KHRpdGFuaWNfZGF0YSlcbmBgYCJ9 -->
-<pre class="r"><code>titanic_age_mean &lt;- mean(titanic_data$age, na.rm = TRUE)
+
+mean(titanic_data$age, na.rm = TRUE)
+median(titanic_data$age, na.rm = TRUE)
+min(titanic_data$age)
+max(titanic_data$age)
+quantile(titanic_data$age, na.rm = TRUE)
+
+titanic_age_mean &lt;- mean(titanic_data$age, na.rm = TRUE)
 titanic_data &lt;- titanic_data %&gt;% mutate(age = if_else(age == '' | is.na(age) , titanic_age_mean, age))
-#tbl_df(titanic_data)
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p><strong>3: Lifeboat</strong></p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBGaWxsIGluIGJsYW5rIGJvYXQgY2VsbHMgd2l0aCBlaXRoZXIgTkEgb3IgTm9uZSBcbnRpdGFuaWNfZGF0YSA8LSB0aXRhbmljX2RhdGEgJT4lIG11dGF0ZShib2F0ID0gaWZfZWxzZShib2F0ID09ICcnIHwgaXMubmEoYm9hdCkgLFwiTm9uZVwiLCBhcy5jaGFyYWN0ZXIoYm9hdCkpKVxuVmlldyh0aXRhbmljX2RhdGEpXG5gYGAifQ== -->
+<pre class="r"><code># Fill in blank boat cells with either NA or None 
+titanic_data &lt;- titanic_data %&gt;% mutate(boat = if_else(boat == '' | is.na(boat) ,&quot;None&quot;, as.character(boat)))
 View(titanic_data)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Ctrl+Shift+Enter</em>.</p>
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Ctrl+Alt+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Ctrl+Shift+K</em> to preview the HTML file).</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIkV4ZXJjaXNlIDMuMS41IFRpdGFuaWMiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIyMjIyAqRGVhbGluZyB3aXRoIG1pc3NpbmcgdmFsdWVzKg0KDQpgYGB7ciBsb2FkX2xpYnJhcnlfZGF0YSwgZWNobz1GQUxTRSwgaW5jbHVkZT1GQUxTRX0NCiMgTG9hZCBsaWJyYXJpZXMgYW5kIHJlYWQgdGl0YW5pYyBDU1YgZmlsZQ0KDQpsaWJyYXJ5KCJkcGx5ciIpDQpsaWJyYXJ5KCJ0aWR5ciIpDQoNCnRpdGFuaWNfZGF0YSA8LSByZWFkLmNzdigidGl0YW5pY19vcmlnaW5hbC5jc3YiKQ0KYGBgDQoNCg0KKioxOiBQb3J0IG9mIGVtYmFya2F0aW9uKioNCmBgYHtyIGZpeF9lbWJhcmt9DQojIFVwZGF0ZSBibGFuayBjZWxscyBpbiAnZW1iYXJrZWQnIHRvICdTJw0KDQp0aXRhbmljX2RhdGEgPC0gdGl0YW5pY19kYXRhICU+JSBtdXRhdGUoZW1iYXJrZWQgPSBpZl9lbHNlKGVtYmFya2VkID09ICcnLCAiUyIsIGFzLmNoYXJhY3RlcihlbWJhcmtlZCkpKQ0KDQpgYGANCg0KDQoqKjI6IEFnZSoqDQpCYXNlZCBvbiB0aGUgb3V0cHV0IGJlbG93LCB3ZSBzZWUgdGhhdCBib3RoIHRoZSBtZWRpYW4gYW5kIG1lYW4gYXJlIDI5Ljg4LiBJbiBhZGRpdGlvbiwgd2UgY2FuIGRlZHVjZSB0aGF0IHRoZSBtaW4gb2YgMC4xNjY3IGFuZCBtYXggb2YgODAgYXJlIG5vdCByZWFsaXN0aWMgdmFsdWVzIGJhc2VkIG9uIHRoZSBxdWFydGlsZSBvdXRwdXQuIEdpdmVuIHRoYXQgNTAlIG9mIHRoZSB2YWx1ZXMgZmFsbCBiZXR3ZWVuIGFnZXMgMjEgYW5kIDM5LCB0aGUgYXZlcmFnZSBvZiAyOS44OCBpcyB0aGUgbW9zdCBsb2dpY2FsIGNob2ljZS4gDQpgYGB7ciBmaXhfYWdlfQ0KIyBGaWxsIGluIGJsYW5rIGFnZSBjZWxscyB3aXRoIHRoZSBtZWFuIG9mIHRoZSBhZ2UgY29sdW1uIA0KDQptZWFuKHRpdGFuaWNfZGF0YSRhZ2UsIG5hLnJtID0gVFJVRSkNCm1lZGlhbih0aXRhbmljX2RhdGEkYWdlLCBuYS5ybSA9IFRSVUUpDQptaW4odGl0YW5pY19kYXRhJGFnZSkNCm1heCh0aXRhbmljX2RhdGEkYWdlKQ0KcXVhbnRpbGUodGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKQ0KDQp0aXRhbmljX2FnZV9tZWFuIDwtIG1lYW4odGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKQ0KdGl0YW5pY19kYXRhIDwtIHRpdGFuaWNfZGF0YSAlPiUgbXV0YXRlKGFnZSA9IGlmX2Vsc2UoYWdlID09ICcnIHwgaXMubmEoYWdlKSAsIHRpdGFuaWNfYWdlX21lYW4sIGFnZSkpDQoNCiN0YmxfZGYodGl0YW5pY19kYXRhKQ0KVmlldyh0aXRhbmljX2RhdGEpDQoNCg0KDQpgYGANCg0KVGhpcyBpcyBhbiBbUiBNYXJrZG93bl0oaHR0cDovL3JtYXJrZG93bi5yc3R1ZGlvLmNvbSkgTm90ZWJvb2suIFdoZW4geW91IGV4ZWN1dGUgY29kZSB3aXRoaW4gdGhlIG5vdGVib29rLCB0aGUgcmVzdWx0cyBhcHBlYXIgYmVuZWF0aCB0aGUgY29kZS4gDQoNClRyeSBleGVjdXRpbmcgdGhpcyBjaHVuayBieSBjbGlja2luZyB0aGUgKlJ1biogYnV0dG9uIHdpdGhpbiB0aGUgY2h1bmsgb3IgYnkgcGxhY2luZyB5b3VyIGN1cnNvciBpbnNpZGUgaXQgYW5kIHByZXNzaW5nICpDdHJsK1NoaWZ0K0VudGVyKi4gDQoNCg0KDQpBZGQgYSBuZXcgY2h1bmsgYnkgY2xpY2tpbmcgdGhlICpJbnNlcnQgQ2h1bmsqIGJ1dHRvbiBvbiB0aGUgdG9vbGJhciBvciBieSBwcmVzc2luZyAqQ3RybCtBbHQrSSouDQoNCldoZW4geW91IHNhdmUgdGhlIG5vdGVib29rLCBhbiBIVE1MIGZpbGUgY29udGFpbmluZyB0aGUgY29kZSBhbmQgb3V0cHV0IHdpbGwgYmUgc2F2ZWQgYWxvbmdzaWRlIGl0IChjbGljayB0aGUgKlByZXZpZXcqIGJ1dHRvbiBvciBwcmVzcyAqQ3RybCtTaGlmdCtLKiB0byBwcmV2aWV3IHRoZSBIVE1MIGZpbGUpLg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIkV4ZXJjaXNlIDMuMS41IFRpdGFuaWMiDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIyMjIyAqRGVhbGluZyB3aXRoIG1pc3NpbmcgdmFsdWVzKg0KDQpgYGB7ciBsb2FkX2xpYnJhcnlfZGF0YSwgZWNobz1GQUxTRSwgaW5jbHVkZT1GQUxTRX0NCiMgTG9hZCBsaWJyYXJpZXMgYW5kIHJlYWQgdGl0YW5pYyBDU1YgZmlsZQ0KDQpsaWJyYXJ5KCJkcGx5ciIpDQpsaWJyYXJ5KCJ0aWR5ciIpDQoNCnRpdGFuaWNfZGF0YSA8LSByZWFkLmNzdigidGl0YW5pY19vcmlnaW5hbC5jc3YiKQ0KYGBgDQoNCg0KKioxOiBQb3J0IG9mIGVtYmFya2F0aW9uKioNCmBgYHtyIGZpeF9lbWJhcmt9DQojIFVwZGF0ZSBibGFuayBjZWxscyBpbiAnZW1iYXJrZWQnIHRvICdTJw0KDQp0aXRhbmljX2RhdGEgPC0gdGl0YW5pY19kYXRhICU+JSBtdXRhdGUoZW1iYXJrZWQgPSBpZl9lbHNlKGVtYmFya2VkID09ICcnLCAiUyIsIGFzLmNoYXJhY3RlcihlbWJhcmtlZCkpKQ0KDQpgYGANCg0KDQoqKjI6IEFnZSoqDQpCYXNlZCBvbiB0aGUgb3V0cHV0IGJlbG93LCB3ZSBzZWUgdGhhdCBib3RoIHRoZSBtZWRpYW4gYW5kIG1lYW4gYXJlIDI5Ljg4LiBJbiBhZGRpdGlvbiwgd2UgY2FuIGRlZHVjZSB0aGF0IHRoZSBtaW4gb2YgMC4xNjY3IGFuZCBtYXggb2YgODAgYXJlIG5vdCByZWFsaXN0aWMgdmFsdWVzIGJhc2VkIG9uIHRoZSBxdWFydGlsZSBvdXRwdXQuIEdpdmVuIHRoYXQgNTAlIG9mIHRoZSB2YWx1ZXMgZmFsbCBiZXR3ZWVuIGFnZXMgMjEgYW5kIDM5LCB0aGUgYXZlcmFnZSBvZiAyOS44OCBpcyB0aGUgbW9zdCBsb2dpY2FsIGNob2ljZS4gDQpgYGB7ciBmaXhfYWdlfQ0KIyBGaWxsIGluIGJsYW5rIGFnZSBjZWxscyB3aXRoIHRoZSBtZWFuIG9mIHRoZSBhZ2UgY29sdW1uIA0KDQptZWFuKHRpdGFuaWNfZGF0YSRhZ2UsIG5hLnJtID0gVFJVRSkNCm1lZGlhbih0aXRhbmljX2RhdGEkYWdlLCBuYS5ybSA9IFRSVUUpDQptaW4odGl0YW5pY19kYXRhJGFnZSkNCm1heCh0aXRhbmljX2RhdGEkYWdlKQ0KcXVhbnRpbGUodGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKQ0KDQp0aXRhbmljX2FnZV9tZWFuIDwtIG1lYW4odGl0YW5pY19kYXRhJGFnZSwgbmEucm0gPSBUUlVFKQ0KdGl0YW5pY19kYXRhIDwtIHRpdGFuaWNfZGF0YSAlPiUgbXV0YXRlKGFnZSA9IGlmX2Vsc2UoYWdlID09ICcnIHwgaXMubmEoYWdlKSAsIHRpdGFuaWNfYWdlX21lYW4sIGFnZSkpDQoNCg0KYGBgDQoNCg0KKiozOiBMaWZlYm9hdCoqDQpgYGB7ciBmaXhfbGlmZWJvYXR9DQojIEZpbGwgaW4gYmxhbmsgYm9hdCBjZWxscyB3aXRoIGVpdGhlciBOQSBvciBOb25lIA0KDQp0aXRhbmljX2RhdGEgPC0gdGl0YW5pY19kYXRhICU+JSBtdXRhdGUoYm9hdCA9IGlmX2Vsc2UoYm9hdCA9PSAnJyB8IGlzLm5hKGJvYXQpICwiTm9uZSIsIGFzLmNoYXJhY3Rlcihib2F0KSkpDQoNCg0KVmlldyh0aXRhbmljX2RhdGEpDQoNCg0KYGBgDQoNCg0K</div>
 
 
 
