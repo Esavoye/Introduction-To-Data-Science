@@ -122,10 +122,10 @@ $(document).ready(function () {
 
 <div id="dealing-with-missing-values" class="section level5">
 <h5><em>Dealing with missing values</em></h5>
-<p><strong>1: Port of embarkation</strong></p>
+<p><strong>1. Port of embarkation</strong></p>
 <pre class="r"><code># Update blank cells in 'embarked' to 'S'
 titanic_data &lt;- titanic_data %&gt;% mutate(embarked = if_else(embarked == '', &quot;S&quot;, as.character(embarked)))</code></pre>
-<p><strong>2: Age</strong> Based on the output below, we see that both the median and mean are 29.88. In addition, we can deduce that the min of 0.1667 and max of 80 are not realistic values based on the quartile output. Given that 50% of the values fall between ages 21 and 39, the average of 29.88 is the most logical choice.</p>
+<p><strong>2. Age</strong> Based on the output below, we see that both the median and mean are 29.88. In addition, we can deduce that the min of 0.1667 and max of 80 are not realistic values based on the quartile output. Given that 50% of the values fall between ages 21 and 39, the average of 29.88 is the most logical choice.</p>
 <pre class="r"><code># Fill in blank age cells with the mean of the age column 
 mean(titanic_data$age, na.rm = TRUE)
 median(titanic_data$age, na.rm = TRUE)
@@ -141,13 +141,13 @@ titanic_data &lt;- titanic_data %&gt;% mutate(age = if_else(age == '' | is.na(ag
 ## [1] 80
 ##      0%     25%     50%     75%    100% 
 ##  0.1667 21.0000 28.0000 39.0000 80.0000</code></pre>
-<p><strong>3: Lifeboat</strong></p>
+<p><strong>3. Lifeboat</strong></p>
 <pre class="r"><code># Fill in blank boat cells with either NA or None 
 titanic_data &lt;- titanic_data %&gt;% mutate(boat = if_else(boat == '' | is.na(boat) ,&quot;None&quot;, as.character(boat)))</code></pre>
-<p><strong>4: Cabin</strong> The cabin number is not a predictable value given the information currently at hand. As such, filling it in would not make sense. The cabin values indicate what deck of the ship the cabin was on. A missing value may indicate the person of that record did not survive.</p>
+<p><strong>4. Cabin</strong> The cabin number is not a predictable value given the information currently at hand. As such, filling it in would not make sense. The cabin values indicate what deck of the ship the cabin was on. A missing value may indicate the person of that record did not survive.</p>
 <pre class="r"><code># Create new column to flag whether or not there is a cabin number in the 'cabin' field 
 titanic_data &lt;- titanic_data %&gt;% mutate(&quot;has_cabin_number&quot; = if_else(cabin != '', 1, 0))</code></pre>
-<p><strong>5: Write cleaned up data to new CSV file</strong></p>
+<p><strong>5. Write cleaned up data to new CSV file</strong></p>
 <pre class="r"><code># Create new CSV file with cleaned up data
 write.csv(titanic_data, &quot;titanic_clean.csv&quot;)</code></pre>
 </div>

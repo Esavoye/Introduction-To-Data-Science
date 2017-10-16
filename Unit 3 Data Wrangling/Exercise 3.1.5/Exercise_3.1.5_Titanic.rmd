@@ -16,14 +16,14 @@ titanic_data <- read.csv("titanic_original.csv")
 ```
 
 
-**1: Port of embarkation**
+**1. Port of embarkation**
 ```{r fix_embark}
 # Update blank cells in 'embarked' to 'S'
 titanic_data <- titanic_data %>% mutate(embarked = if_else(embarked == '', "S", as.character(embarked)))
 ```
 
 
-**2: Age**
+**2. Age**
 Based on the output below, we see that both the median and mean are 29.88. In addition, we can deduce that the min of 0.1667 and max of 80 are not realistic values based on the quartile output. Given that 50% of the values fall between ages 21 and 39, the average of 29.88 is the most logical choice. 
 ```{r fix_age, results='hold'}
 # Fill in blank age cells with the mean of the age column 
@@ -38,23 +38,22 @@ titanic_data <- titanic_data %>% mutate(age = if_else(age == '' | is.na(age) , t
 ```
 
 
-**3: Lifeboat**
+**3. Lifeboat**
 ```{r fix_lifeboat}
 # Fill in blank boat cells with either NA or None 
 titanic_data <- titanic_data %>% mutate(boat = if_else(boat == '' | is.na(boat) ,"None", as.character(boat)))
 ```
 
 
-**4: Cabin**
+**4. Cabin**
 The cabin number is not a predictable value given the information currently at hand. As such, filling it in would not make sense. The cabin values indicate what deck of the ship the cabin was on. A missing value may indicate the person of that record did not survive.    
 ```{r fix_cabin}
 # Create new column to flag whether or not there is a cabin number in the 'cabin' field 
 titanic_data <- titanic_data %>% mutate("has_cabin_number" = if_else(cabin != '', 1, 0))
 ```
 
-**5: Write cleaned up data to new CSV file**
+**5. Write cleaned up data to new CSV file**
 ```{r write_refined_data}
 # Create new CSV file with cleaned up data
 write.csv(titanic_data, "titanic_clean.csv")
 ```
-
