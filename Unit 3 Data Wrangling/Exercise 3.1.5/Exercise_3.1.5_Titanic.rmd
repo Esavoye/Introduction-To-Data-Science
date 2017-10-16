@@ -10,6 +10,7 @@ output: html_document
 
 library("dplyr")
 library("tidyr")
+library("knitr")
 
 titanic_data <- read.csv("titanic_original.csv")
 ```
@@ -24,7 +25,7 @@ titanic_data <- titanic_data %>% mutate(embarked = if_else(embarked == '', "S", 
 
 **2: Age**
 Based on the output below, we see that both the median and mean are 29.88. In addition, we can deduce that the min of 0.1667 and max of 80 are not realistic values based on the quartile output. Given that 50% of the values fall between ages 21 and 39, the average of 29.88 is the most logical choice. 
-```{r fix_age}
+```{r fix_age, results='hold'}
 # Fill in blank age cells with the mean of the age column 
 mean(titanic_data$age, na.rm = TRUE)
 median(titanic_data$age, na.rm = TRUE)
@@ -51,6 +52,7 @@ The cabin number is not a predictable value given the information currently at h
 titanic_data <- titanic_data %>% mutate("has_cabin_number" = if_else(cabin != '', 1, 0))
 ```
 
+**5: Write cleaned up data to new CSV file**
 ```{r write_refined_data}
 # Create new CSV file with cleaned up data
 write.csv(titanic_data, "titanic_clean.csv")
