@@ -1,0 +1,49 @@
+---
+title: "Applying data wrangling to IGN Data"
+output: html_notebook
+---
+
+1. Load original IGN data
+```{r load_data}
+# Load libraries and read IGN CSV file
+
+library("dplyr")
+library("tidyr")
+library("knitr")
+
+IGN_data <- read.csv("ign_original.csv")
+```
+
+2. Check release year to be greater than 1995. If not, adjust records?
+```{r check_release_year}
+# Release year is supposed to be greater than 1995
+
+IGN_data %>% distinct(release_year) %>% 
+  arrange(release_year)
+
+IGN_data[IGN_data$release_year == "1970", ]
+
+IGN_data <- IGN_data %>% mutate(release_year = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(2012), release_year)) %>% 
+  mutate(release_month = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(4), release_month)) %>% 
+  mutate(release_day = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(24), release_day))
+
+IGN_data[IGN_data$title == "The Walking Dead: The Game -- Episode 1: A New Day", ]
+
+
+View(IGN_data)
+```
+
+3. Group platforms into condensed platform list
+```{r condense_platform_list}
+# Release year is supposed to be greater than 1995
+
+IGN_data %>% distinct(platform) %>% 
+  arrange(platform)
+
+IGN_data <- IGN_data %>% mutate("platform_condensed" = if_else(platform == "Atari 2600" | platform == "Atari 5200" , "Atari", if_else()) 
+
+IGN_data[IGN_data$title == "The Walking Dead: The Game -- Episode 1: A New Day", ]
+
+
+View(IGN_data)
+```
