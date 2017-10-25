@@ -3,7 +3,7 @@ title: "Applying data wrangling to IGN Data"
 output: html_notebook
 ---
 
-1. Load original IGN data
+1. Load original IGN data and necessary libraries
 ```{r load_data}
 # Load libraries and read IGN CSV file
 
@@ -15,7 +15,7 @@ IGN_data <- read.csv("ign_original.csv")
 ```
 
 2. Check release year to be greater than 1995. If not, adjust records?
-```{r check_release_year}
+```{r check_release_year, results='hold'}
 # Release year is supposed to be greater than 1995
 
 IGN_data %>% distinct(release_year) %>% 
@@ -27,10 +27,8 @@ IGN_data <- IGN_data %>% mutate(release_year = if_else(title == "The Walking Dea
   mutate(release_month = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(4), release_month)) %>% 
   mutate(release_day = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(24), release_day))
 
-IGN_data[IGN_data$title == "The Walking Dead: The Game -- Episode 1: A New Day", ]
 
 
-View(IGN_data)
 ```
 
 3. Group platforms into condensed platform list
@@ -40,10 +38,37 @@ View(IGN_data)
 IGN_data %>% distinct(platform) %>% 
   arrange(platform)
 
-IGN_data <- IGN_data %>% mutate("platform_condensed" = if_else(platform == "Atari 2600" | platform == "Atari 5200" , "Atari", if_else()) 
-
-IGN_data[IGN_data$title == "The Walking Dead: The Game -- Episode 1: A New Day", ]
-
+IGN_data$platform_group <- if_else(grepl("Playstation", IGN_data$platform, ignore.case = TRUE), "Playstation", 
+                                  if_else(grepl("Game Boy", IGN_data$platform, ignore.case = TRUE), "Game Boy",
+                                         if_else(grepl("Nintendo", IGN_data$platform, ignore.case = TRUE), "Nintendo",
+                                                if_else(grepl("Sega", IGN_data$platform, ignore.case = TRUE), "Sega",
+                                                       if_else(grepl("Xbox", IGN_data$platform, ignore.case = TRUE), "Xbox", as.character(IGN_data$platform))))))
 
 View(IGN_data)
+
+IGN_data %>% distinct(platform_group)
+
+unique(IGN_data$genre)
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
