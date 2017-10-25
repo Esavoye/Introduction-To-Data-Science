@@ -38,15 +38,22 @@ IGN_data <- IGN_data %>% mutate(release_year = if_else(title == "The Walking Dea
 IGN_data %>% distinct(platform) %>% 
   arrange(platform)
 
-IGN_data$platform_group <- if_else(grepl("Playstation", IGN_data$platform, ignore.case = TRUE), "Playstation", 
-                                  if_else(grepl("Game Boy", IGN_data$platform, ignore.case = TRUE), "Game Boy",
-                                         if_else(grepl("Nintendo", IGN_data$platform, ignore.case = TRUE), "Nintendo",
-                                                if_else(grepl("Sega", IGN_data$platform, ignore.case = TRUE), "Sega",
-                                                       if_else(grepl("Xbox", IGN_data$platform, ignore.case = TRUE), "Xbox", as.character(IGN_data$platform))))))
+IGN_data$platform_group <- ifelse(grepl("Playstation", IGN_data$platform, ignore.case = TRUE), "Playstation", 
+                                  ifelse(grepl("Game Boy", IGN_data$platform, ignore.case = TRUE), "Game Boy",
+                                          ifelse(grepl("Sega", IGN_data$platform, ignore.case = TRUE) | grepl("Genesis", IGN_data$platform, ignore.case = TRUE) | grepl("Dreamcast", IGN_data$platform, ignore.case = TRUE) | grepl("Master System", IGN_data$platform, ignore.case = TRUE) | grepl("Saturn", IGN_data$platform, ignore.case = TRUE), "Sega",
+                                                  ifelse(grepl("Nintendo", IGN_data$platform, ignore.case = TRUE) | grepl("NES", IGN_data$platform, ignore.case = TRUE) | grepl("Wii", IGN_data$platform, ignore.case = TRUE) | grepl("GameCube", IGN_data$platform, ignore.case = TRUE), "Nintendo",
+                                                          ifelse(grepl("Xbox", IGN_data$platform, ignore.case = TRUE), "Xbox",
+                                                                  ifelse(grepl("Iphone", IGN_data$platform, ignore.case = TRUE) | grepl("Ipod", IGN_data$platform, ignore.case = TRUE) | grepl("Ipad", IGN_data$platform, ignore.case = TRUE) | grepl("Macintosh", IGN_data$platform, ignore.case = TRUE), "Apple",
+                                                                          ifelse(grepl("Atari", IGN_data$platform, ignore.case = TRUE) | grepl("Lynx", IGN_data$platform, ignore.case = TRUE), "Atari",
+                                                                                  ifelse(grepl("Windows", IGN_data$platform, ignore.case = TRUE) | grepl("PC", IGN_data$platform, ignore.case = TRUE), "Windows",
+                                                                                          ifelse(grepl("NeoGeo", IGN_data$platform, ignore.case = TRUE), "NeoGeo",
+                                                                                                  ifelse(grepl("Ouya", IGN_data$platform, ignore.case = TRUE) | grepl("Android", IGN_data$platform, ignore.case = TRUE), "Android",
+                                                                                                          ifelse(grepl("SteamOS", IGN_data$platform, ignore.case = TRUE) | grepl("Linux", IGN_data$platform, ignore.case = TRUE), "Linux",
+                                                                                                                  ifelse(grepl("TurboGrafx", IGN_data$platform, ignore.case = TRUE), "TurboGrafx",
+                                                                                                                          ifelse(grepl("WonderSwan", IGN_data$platform, ignore.case = TRUE), "WonderSwan", "Other")))))))))))))
 
-View(IGN_data)
-
-IGN_data %>% distinct(platform_group)
+IGN_data %>% group_by(platform, platform_group) %>% 
+  summarise(n_distinct(platform))
 
 unique(IGN_data$genre)
 ```
