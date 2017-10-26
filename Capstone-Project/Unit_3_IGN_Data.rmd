@@ -33,7 +33,7 @@ IGN_data <- IGN_data %>% mutate(release_year = if_else(title == "The Walking Dea
 
 3. Group platforms into condensed platform list
 ```{r condense_platform_list}
-# Release year is supposed to be greater than 1995
+# 59 variables in original platform column
 
 IGN_data %>% distinct(platform) %>% 
   arrange(platform)
@@ -59,7 +59,78 @@ unique(IGN_data$genre)
 ```
 
 
+4. Group genres into condensed genre list
+```{r group_genre_list}
+# 113 different genres need to be grouped into a usable amount of variables 
 
+IGN_data %>% distinct(genre) %>% 
+  arrange(genre)
+
+Action <- c("Action", "Action, Adventure", "Action, Compilation", "Action, Editor", "Action, Platformer", "Action, Puzzle", "Action, RPG", "Action, Simulation", "Action, Strategy")
+
+Adventure <- c("Adventure", "Adventure, Adult", "Adventure, Adventure", "Adventure, Compilation", "Adventure, Episodic", "Adventure, Platformer", "Adventure, RPG")
+
+Sports <- c("Baseball", "Sports", "Sports, Action", "Sports, Baseball", "Sports, Compilation", "Sports, Editor", "Sports, Fighting", "Sports, Golf", "Sports, Other", "Sports, Party", "Sports, Racing", "Sports, Simulation")
+
+Cards <- c("Card", "Card, Battle", "Card, Compilation", "Card, RPG")
+
+Compilation <- c("Compilation", "Compilation, Compilation", "Compilation, RPG")
+
+Education <- c("Educational", "Educational, Action", "Educational, Adventure", "Educational, Card", "Educational, Productivity", "Educational, Puzzle", "Educational, Simulation", "Educational, Trivia")
+
+Fighting <- c("Fighting", "Fighting, Action", "Fighting, Adventure", "Fighting, Compilation", "Fighting, RPG", "Fighting, Simulation")
+Flight <- c("Flight", "Flight, Action", "Flight, Racing", "Flight, Simulation")
+
+Hunting <- c("Hunting", "Hunting, Action", "Hunting, Simulation")
+
+Music <- c("Music", "Music, Action", "Music, Adventure", "Music, Compilation", "Music, Editor", "Music, RPG")
+
+Pinball <- c("Pinball", "Pinball, Compilation")
+
+Platformer <- c("Platformer", "Platformer, Action", "Platformer, Adventure")
+
+Productivity <- c("Productivity, Action", "Productivity")
+
+Puzzle <- c("Puzzle", "Puzzle, Action", "Puzzle, Adventure", "Puzzle, Compilation", "Puzzle, Platformer", "Puzzle, RPG", "Puzzle, Word Game")
+
+Racing <- c("Racing", "Racing, Action", "Racing, Compilation", "Racing, Editor", "Racing, Shooter", "Racing, Simulation")
+
+RPG <- c("RPG", "RPG, Action", "RPG, Compilation", "RPG, Editor", "RPG, Simulation")
+
+Shooter <- c("Shooter", "Shooter, Adventure", "Shooter, First-Person", "Shooter, Platformer", "Shooter, RPG")
+
+Simulation <- c("Simulation", "Simulation, Adventure")
+
+Strategy <- c("Strategy", "Strategy, Compilation", "Strategy, RPG", "Strategy, Simulation")
+
+Wrestling <- c("Wrestling", "Wrestling, Simulation")
+
+IGN_data$genre_group <- ifelse(grepl(paste(Action, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Action",
+                               ifelse(grepl(paste(Adventure, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Adventure",
+                                      ifelse(grepl(paste(Sports, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Sports",
+                                             ifelse(grepl(paste(Cards, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Cards",
+                                                    ifelse(grepl(paste(Compilation, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Compilation",
+                                                           ifelse(grepl(paste(Education, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Education",
+                                                                  ifelse(grepl(paste(Fighting, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Fighting",
+                                                                         ifelse(grepl(paste(Flight, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Flight",
+                                                                                ifelse(grepl(paste(Hunting, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Hunting",
+                                                                                       ifelse(grepl(paste(Music, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Music",
+                                                                                              ifelse(grepl(paste(Pinball, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Pinball",
+                                                                                                     ifelse(grepl(paste(Platformer, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Platformer",
+                                                                                                            ifelse(grepl(paste(Productivity, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Productivity",
+                                                                                                                   ifelse(grepl(paste(Puzzle, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Puzzle",
+                                                                                                                          ifelse(grepl(paste(Racing, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Racing",
+                                                                                                                                 ifelse(grepl(paste(RPG, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "RPG",
+                                                                                                                                        ifelse(grepl(paste(Shooter, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Shooter",
+                                                                                                                                               ifelse(grepl(paste(Simulation, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Simulation",
+                                                                                                                                                      ifelse(grepl(paste(Strategy, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Strategy",
+                                                                                                                                                             ifelse(grepl(paste(Wrestling, collapse = "|"), IGN_data$genre, ignore.case = FALSE), "Wrestling", "Other"))))))))))))))))))))
+                                                  
+IGN_data %>% distinct(genre_group) %>% 
+  arrange(genre_group)                                                                 
+
+unique(IGN_data$genre)
+```
 
 
 
