@@ -49,7 +49,7 @@ library(knitr)
 library(readr)
 library(dplyr)
 
-game_reviews <- read_csv("ign.csv")
+game_reviews <- read_csv("ign_original.csv")
 
 ```
 
