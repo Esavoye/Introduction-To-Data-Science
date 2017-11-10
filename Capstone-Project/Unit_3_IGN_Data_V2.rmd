@@ -22,18 +22,20 @@ library("knitr")
 IGN_data <- read.csv("ign_original.csv")
 ```
 
-```{r show_table, results='hide'}
-tbl_df(IGN_data)
+<br>
+
+```{r show_table,  tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+head(tbl_df(IGN_data), 5)
 ```
 
 <br>
 
 Of the variables available for use, score_phrase, platform, score, genre, editors_choice, release_year, release_month, and release_day are the ones I am using in my analysis. As such, I analyzed them for missing values, outliers, and whether or not the number of distinct factors in each was usable. Editors_choice, score_phrase, and score did not need cleaning. However, when checking release_year, I noticed an outlier titled "The Walking Dead: The Game -- Episode 1: A New Day". This record had a release date of 1/1/1970. Given the dataset is spanning 1996 - 2016, I chose to correct the outlier to the correct release date of 4/24/2012.
 
-```{r check_release_year, results='hide', tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+```{r check_release_year, tidy=TRUE, tidy.opts=list(width.cutoff=60), max.print = 10}
 # Release year is supposed to be higher than 1995
 
-IGN_data %>% distinct(release_year) %>% 
+head(IGN_data %>% distinct(release_year),5) %>% 
   arrange(release_year)
 
 IGN_data[IGN_data$release_year == "1970", ]
@@ -57,23 +59,25 @@ IGN_data %>% distinct(platform) %>%
 Platform_Map <- read.csv("platform_map.csv")
 
 IGN_data <- IGN_data %>% left_join(Platform_Map, by = c("platform" = "platform"))
-
-IGN_data %>% group_by(platform, platform_group) %>% 
-  summarise(n_distinct(platform))
-
 ```
 
+```{r platform_group_list, tidy=TRUE, max.print = 10}
+IGN_data %>% group_by(platform, platform_group) %>% 
+  summarise( n_distinct(platform_group))
+```
 <br>
 
 Similar to the platform variable, the genre variable has a multitude of factors which makes intelligent analysis a bit difficult. There are 113 unique genres within the field. I chose my grouping based on an overall description (e.g., Sports, Cards, Action, etc.) given the numerous distinct factors. Before cleaning up the column, I checked for any blank cells. Out of 18,625 observations, 36 do not have a genre which is .19%. Due to the blank records being less than 1% of the overall genre column, I chose not to populate them but instead mapped them to 'Other.' To map genre, I loaded a 'genre map' CSV file to merge the new genre_group variable onto the original dataset. In doing so, I brought the number of unique genres from 113 to 21.
 
-```{r check_genre, results='hide', tidy=TRUE}
+```{r check_genre, tidy=TRUE, results='hide'}
 # Check for blanks in genre column
 
 IGN_data %>% distinct(genre) %>% 
   arrange(genre)
+```
 
-IGN_data[IGN_data$genre == "", ]
+```{r check_genre_blanks, tidy=TRUE, max.print = 10}
+group_by(IGN_data[IGN_data$genre == "", ])
 ```
 
 ```{r group_genre_list, results='hide', tidy=TRUE}
@@ -86,10 +90,10 @@ IGN_data %>% distinct(genre) %>%
 Genre_Map <- read.csv("genre_map.csv")
 
 IGN_data <- IGN_data %>% left_join(Genre_Map, by = c("genre" = "genre"))
-                                                  
+```
+```{r genre_group_list, tidy=TRUE, max.print = 10}
 unique(IGN_data$genre_group)
 ```
-
 <br>
 
 After cleaning up the variables that I will be using in my analysis, I wrote the wrangled data to a new file called "ign_clean.csv" for further use later in the course.
