@@ -1,0 +1,200 @@
+---
+title: 'IGN Data: Applying Statistics'
+author: 'by Ellen A. Savoye'
+output:
+  pdf_document: default
+  word_document: default
+  html_document:
+    df_print: paged
+---
+***
+<br>
+
+
+
+Get going by asking the following questions and looking for the answers with some code and plots:
+
+Can you count something interesting?
+
+Can you find some trends (high, low, increase, decrease, anomalies)?
+
+Can you make a bar plot or a histogram?
+
+Can you compare two related quantities?
+
+Can you make a scatterplot?
+
+Can you make a time-series plot?
+
+Having made these plots, what are some insights you get from them? Do you see any correlations? Is there a hypothesis you would like to investigate further? What other questions do they lead you to ask?
+
+
+
+After cleaning up my dataset, I moved into applying some exploratory data analysis to unearth some inferences about the data. 
+
+```{r load_data, echo=FALSE, include=FALSE}
+# Load libraries and read IGN CSV file
+
+library("dplyr")
+library("tidyr")
+library("knitr")
+library("ggplot2")
+
+IGN_data <- read.csv("ign_clean.csv")
+```
+
+<br>
+
+```{r show_table,  tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+head(tbl_df(IGN_data), 5)
+```
+
+<br>
+
+The plots below are based on all 20 years worth of data. I knew the more positive the score phrase, the better the score. However, I wanted to plot see how far down an "Editor's Choice" game would score. Based on the second graph below, the lowest is approximately an 8. However intersting this fact is, it only goes to show how large the score range is for an "Editor's Choice" game can be.
+```{r score_phrase}
+
+sort(unique(IGN_data$score_phrase))
+
+Score_vs_Phrase <- ggplot(data=IGN_data, aes(score)) + 
+  geom_histogram(aes(fill=factor(score_phrase)),bins=80) + 
+  xlab('Score') + 
+  theme(legend.position=c(.2, .6)) + 
+  theme(legend.title=element_blank()) 
+print(Score_vs_Phrase)
+
+Score_vs_EdChc <- ggplot(data=IGN_data, aes(score)) +
+  geom_histogram(aes(fill=factor(editors_choice)),bins=80) + 
+  xlab('Score') + theme(legend.position=c(.2, .7)) +
+  theme(legend.title=element_blank()) 
+print(Score_vs_EdChc)
+
+Score_vs_EdChc_vs_Yr <- ggplot(data=IGN_data, aes(score)) +
+  geom_histogram(aes(fill=factor(editors_choice)),bins=80) + 
+  xlab('Score') + theme(legend.position=c(.2, .7)) +
+  theme(legend.title=element_blank()) +
+  facet_grid(IGN_data$release_year ~ ., IGN_data$release_year > 2007)
+print(Score_vs_EdChc_vs_Yr)
+
+```
+
+
+Comparing score versus the cleaned up group, I'd like to see if 
+```{r Platform_score}
+
+IGN_data %>% 
+  group_by(platform_group) %>%
+  summarise(no_rows = length(platform_group)) %>% 
+  arrange(no_rows)
+
+ggplot(IGN_data, aes(x = factor(release_year), y = score)) + 
+  geom_boxplot(aes(fill=(platform_group))) + 
+  theme(legend.position=c(.1, .2)) + 
+  xlab('Year') + 
+  ylab('Score') + 
+  theme(legend.title=element_blank()) +
+  facet_grid(. ~ release_year)
+```
+
+Count something interesting: # of editors choice games, score per genre, 
+
+Trends: day of week release, time of the year,
+
+Bar plot or histogram:
+
+scatterplot:
+
+time-series plot:
+
+Having made these plots, what are some insights you get from them? Do you see any correlations? Is there a hypothesis you would like to investigate further? What other questions do they lead you to ask?
+
+Of the variables available for use, score_phrase, platform, score, genre, editors_choice, release_year, release_month, and release_day are the ones I am using in my analysis. As such, I analyzed them for missing values, outliers, and whether or not the number of distinct factors in each was usable. Editors_choice, score_phrase, and score did not need cleaning. However, when checking release_year, I noticed an outlier titled "The Walking Dead: The Game -- Episode 1: A New Day". This record had a release date of 1/1/1970. Given the dataset is spanning 1996 - 2016, I chose to correct the outlier to the correct release date of 4/24/2012.
+
+```{r check_release_year, tidy=TRUE, tidy.opts=list(width.cutoff=60), max.print = 10}
+# Release year is supposed to be higher than 1995
+
+head(IGN_data %>% distinct(release_year),5) %>% 
+  arrange(release_year)
+
+IGN_data[IGN_data$release_year == "1970", ]
+
+IGN_data <- IGN_data %>% mutate(release_year = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(2012), release_year)) %>% 
+  mutate(release_month = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(4), release_month)) %>% 
+  mutate(release_day = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(24), release_day))
+
+```
+
+<br>
+
+With the outlier corrected, platform and genre variables remained. The original platform variable consisted of 59 distinct factors. Because platform spanned multiple generations of systems (e.g., PlayStation 1-3) and because not all manufacturers kept system naming consistent, I chose to combine the values into a condensed version based on system name/manufacturer and created a new variable named platform_group. To do so, I loaded a 'platform map' CSV file to merge the new platform_group variable onto the original dataset. After comparing the original platform variable against the new platform_group to ensure no misplaced systems, I moved onto the genre variable.
+
+```{r condense_platform_list, results='hide', tidy=TRUE}
+# 59 variables in original platform column
+
+IGN_data %>% distinct(platform) %>% 
+  arrange(platform)
+
+Platform_Map <- read.csv("platform_map.csv")
+
+IGN_data <- IGN_data %>% left_join(Platform_Map, by = c("platform" = "platform"))
+```
+
+```{r platform_group_list, tidy=TRUE, max.print = 10}
+IGN_data %>% group_by(platform, platform_group) %>% 
+  summarise( n_distinct(platform_group))
+```
+<br>
+
+Similar to the platform variable, the genre variable has a multitude of factors which makes intelligent analysis a bit difficult. There are 113 unique genres within the field. I chose my grouping based on an overall description (e.g., Sports, Cards, Action, etc.) given the numerous distinct factors. Before cleaning up the column, I checked for any blank cells. Out of 18,625 observations, 36 do not have a genre which is .19%. Due to the blank records being less than 1% of the overall genre column, I chose not to populate them but instead mapped them to 'Other.' To map genre, I loaded a 'genre map' CSV file to merge the new genre_group variable onto the original dataset. In doing so, I brought the number of unique genres from 113 to 21.
+
+```{r check_genre, tidy=TRUE, results='hide'}
+# Check for blanks in genre column
+
+IGN_data %>% distinct(genre) %>% 
+  arrange(genre)
+```
+
+```{r check_genre_blanks, tidy=TRUE, max.print = 10}
+group_by(IGN_data[IGN_data$genre == "", ])
+```
+
+```{r group_genre_list, results='hide', tidy=TRUE}
+
+# 113 unique factors in genre column 
+
+IGN_data %>% distinct(genre) %>% 
+  arrange(genre)
+
+Genre_Map <- read.csv("genre_map.csv")
+
+IGN_data <- IGN_data %>% left_join(Genre_Map, by = c("genre" = "genre"))
+```
+```{r genre_group_list, tidy=TRUE, max.print = 10}
+unique(IGN_data$genre_group)
+```
+<br>
+
+After cleaning up the variables that I will be using in my analysis, I wrote the wrangled data to a new file called "ign_clean.csv" for further use later in the course.
+
+```{r cleaned_code_CSV, results='hide', tidy=TRUE}
+
+write.csv(IGN_data, "ign_clean.csv")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
