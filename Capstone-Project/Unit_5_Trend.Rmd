@@ -1,11 +1,8 @@
 ---
 title: 'IGN Data: Applying Statistics'
-author: 'by Ellen A. Savoye'
+author: "by Ellen A. Savoye"
 output:
-  html_document:
-    df_print: paged
-  word_document: default
-  pdf_document: default %>% 
+  pdf_document: default
 ---
 ***
 <br>
@@ -35,6 +32,7 @@ After cleaning up my dataset, I moved into applying some exploratory data analys
 ```{r load_data, echo=FALSE, include=FALSE}
 # Load libraries and read IGN CSV file
 
+library("latexpdf")
 library("dplyr")
 library("tidyr")
 library("knitr")
