@@ -2,17 +2,14 @@
 title: "IGN Video Game Reviews"
 author: "by Ellen A Savoye"
 date: "April 21 2018"
-output:
-  html_document:
-    df_print: paged
-  pdf_document: default
+output: pdf_document
 subtitle: Data Story
 ---
 ***
-
-
+  
+  
 # Introduction
-
+  
 Over the last 20 years, a plethora of video games have been released in an ever growing market of gaming consoles. In tandem With the creation of these games, a website called IGN began releasing reviews and ratings of the aforementioned games. These ratings and reviews could potentially be compiled and analyzed to create insights that would be useful to console and video game creators. With analysis, console and video game creators would be able to determine their market/popularity standing in comparison to other consoles and games. Furthermore, they would be able to determine if there is a particular genre that needs more development in order to potentially increase their rating and market standpoint. To do such an analysis, data was sourced from Kaggle (<https://www.kaggle.com/egrinstein/20-years-of-games>) and IGN (<http://ign.com/games/reviews>), via a crawl, consisting of 20 years worth of video game data.
 
 # Caveats
@@ -60,22 +57,21 @@ pander::pander(IGN_data[1:5, ], caption="IGN Data")
 
 To take a proper look at the data, I loaded the original dataset as a CSV file and the necessary libraries. Of the variables available for use, score_phrase, platform, score, genre, editors_choice, release_year, release_month, and release_day are the ones I used in my analysis. As such, I analyzed them for missing values, outliers, and whether or not the number of distinct factors in each was usable. Editors_choice, score_phrase, and score did not need cleaning. However, when checking release_year, I noticed an outlier titled "The Walking Dead: The Game -- Episode 1: A New Day". This record had a release date of 1/1/1970. Given the dataset is spanning 1996 - 2016, I chose to correct the outlier to the correct release date of 4/24/2012.
 
-```{r show_table, tidy=TRUE, results='asis',max.print = 10, tidy.opts=list(width.cutoff=60)}
+```{r show_table, tidy=TRUE, max.print = 10, tidy.opts=list(width.cutoff=60)}
 head(tbl_df(IGN_data), 5)
 ```
-
 
 ```{r check_release_year, tidy=TRUE, tidy.opts=list(width.cutoff=60), max.print = 10}
 # Release year is supposed to be higher than 1995
 
 head(IGN_data %>% distinct(release_year),5) %>% 
-  arrange(release_year)
+arrange(release_year)
 
 IGN_data[IGN_data$release_year == "1970", ]
 
 IGN_data <- IGN_data %>% mutate(release_year = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(2012), release_year)) %>% 
-  mutate(release_month = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(4), release_month)) %>% 
-  mutate(release_day = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(24), release_day))
+mutate(release_month = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(4), release_month)) %>% 
+mutate(release_day = if_else(title == "The Walking Dead: The Game -- Episode 1: A New Day", as.integer(24), release_day))
 
 ```
 
@@ -85,7 +81,7 @@ With the outlier corrected, platform and genre variables remained. The original 
 # 59 variables in original platform column
 
 IGN_data %>% distinct(platform) %>% 
-  arrange(platform)
+arrange(platform)
 
 Platform_Map <- read.csv("platform_map.csv") 
 as.character(Platform_Map$platform)
@@ -95,7 +91,7 @@ IGN_data <- IGN_data %>% left_join(Platform_Map, by = c("platform" = "platform")
 
 ```{r platform_group_list, tidy=TRUE, max.print = 10}
 IGN_data %>% group_by(platform, platform_group) %>% 
-  summarise( n_distinct(platform_group))
+summarise( n_distinct(platform_group))
 ```
 
 Similar to the platform variable, the genre variable has a multitude of factors which makes intelligent analysis a bit difficult. There are 113 unique genres within the field. I chose my grouping based on an overall description (e.g., Sports, Cards, Action, etc.) given the numerous distinct factors. Before cleaning up the column, I checked for any blank cells. Out of 18,625 observations, 36 do not have a genre which is .19%. Due to the blank records being less than 1% of the overall genre column, I chose not to populate them but instead mapped them to 'Other.' To map genre, I loaded a 'genre map' CSV file to merge the new genre_group variable onto the original dataset. In doing so, I brought the number of unique genres from 113 to 21.
@@ -104,7 +100,7 @@ Similar to the platform variable, the genre variable has a multitude of factors 
 # Check for blanks in genre column
 
 IGN_data %>% distinct(genre) %>% 
-  arrange(genre)
+arrange(genre)
 ```
 
 ```{r check_genre_blanks, tidy=TRUE, max.print = 10}
@@ -116,7 +112,7 @@ group_by(IGN_data[IGN_data$genre == "", ])
 # 113 unique factors in genre column 
 
 IGN_data %>% distinct(genre) %>% 
-  arrange(genre)
+arrange(genre)
 
 Genre_Map <- read.csv("genre_map.csv")
 as.character(Genre_Map$genre)
@@ -146,9 +142,9 @@ For the first look, I'd like to determine what are the top genres and what the t
 ```{r top_genres, tidy=TRUE}
 
 top_genres <- IGN_data_cleaned %>%
-    group_by(genre_group) %>%
-    summarize(genres_count = n()) %>%
-    arrange(desc(genres_count))
+  group_by(genre_group) %>%
+  summarize(genres_count = n()) %>%
+  arrange(desc(genres_count))
 
 top_genres$genre_group <- factor(top_genres$genre_group, levels = top_genres$genre_group[order(top_genres$genres_count)])
 
@@ -176,21 +172,21 @@ Due to a little more than half of the genres having a count of 500+, I'm using 5
 ```{r top_genres_scores, tidy=TRUE}
 
 top_genre_scores <- IGN_data_cleaned %>%
-  group_by(genre_group) %>%
-  summarize(sum_genres_count = n()) %>%
-  arrange(desc(sum_genres_count)) %>% 
-  filter(sum_genres_count > 499) 
+group_by(genre_group) %>%
+summarize(sum_genres_count = n()) %>%
+arrange(desc(sum_genres_count)) %>% 
+filter(sum_genres_count > 499) 
 top_genre_scores <- top_genre_scores[,1]
 
 colourCount = length(unique(top_genres$genre_group))
 fill_purple <- colorRampPalette(brewer.pal(9,"BuPu"))
 
 top_genres_score_plot <- IGN_data_cleaned %>% 
-  filter(top_genre_scores %in% genre_group) %>% 
-  ggplot(aes(x = genre_group, y = score, fill = genre_group, color = genre_group)) +
-  geom_boxplot(alpha = 0.5) +
-  labs(x = "Top Genres", y = "Score", title = "Distribution of Scores by Top Genres for 1996-2016") +
-  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) 
+filter(top_genre_scores %in% genre_group) %>% 
+ggplot(aes(x = genre_group, y = score, fill = genre_group, color = genre_group)) +
+geom_boxplot(alpha = 0.5) +
+labs(x = "Top Genres", y = "Score", title = "Distribution of Scores by Top Genres for 1996-2016") +
+theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) 
 top_genres_score_plot
 
 ```
@@ -200,9 +196,9 @@ top_genres_score_plot
 ```{r top_platforms, tidy=TRUE}
 
 top_platform <- IGN_data_cleaned %>%
-    group_by(platform_group) %>%
-    summarize(platform_count = n()) %>%
-    arrange(desc(platform_count))
+group_by(platform_group) %>%
+summarize(platform_count = n()) %>%
+arrange(desc(platform_count))
 
 top_platform$platform_group <- factor(top_platform$platform_group, levels = top_platform$platform_group[order(top_platform$platform_count)])
 
@@ -210,15 +206,15 @@ colourCount = length(unique(top_platform$platform_group))
 fill_purple <- colorRampPalette(brewer.pal(9,"PuRd"))
 
 top_platform_plot <- top_platform %>% 
-  filter(platform_group != "NA") %>% 
-  ggplot(aes(x = platform_group, y = platform_count, fill = platform_group)) +
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  geom_text(aes(label = platform_count), size = 2.5, color = "black", hjust = -.5) +
-  labs(x = "Platform", y = "Number of Platforms", title = "Platforms of Video Games for 1996-2016") +
-  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-  ylim(0, max(top_platform$platform_count + 100)) +
-  scale_fill_manual(values = fill_purple(colourCount))
+filter(platform_group != "NA") %>% 
+ggplot(aes(x = platform_group, y = platform_count, fill = platform_group)) +
+geom_bar(stat = "identity") +
+coord_flip() +
+geom_text(aes(label = platform_count), size = 2.5, color = "black", hjust = -.5) +
+labs(x = "Platform", y = "Number of Platforms", title = "Platforms of Video Games for 1996-2016") +
+theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
+ylim(0, max(top_platform$platform_count + 100)) +
+scale_fill_manual(values = fill_purple(colourCount))
 top_platform_plot
 ```
 
@@ -229,9 +225,9 @@ While some of these platforms have had multiple versions/evolutions over the las
 ```{r top_platforms_score, tidy=TRUE}
 
 top_platform <- IGN_data_cleaned %>%
-    group_by(platform_group) %>%
-    summarize(platform_count = n()) %>%
-    arrange(desc(platform_count))
+group_by(platform_group) %>%
+summarize(platform_count = n()) %>%
+arrange(desc(platform_count))
 
 top_platform$platform_group <- factor(top_platform$platform_group, levels = top_platform$platform_group[order(top_platform$platform_count)])
 
@@ -239,15 +235,15 @@ colourCount = length(unique(top_platform$platform_group))
 fill_purple <- colorRampPalette(brewer.pal(9,"PuRd"))
 
 top_platform_plot <- top_platform %>% 
-  filter(platform_group != "NA") %>% 
-  ggplot(aes(x = platform_group, y = platform_count, fill = platform_group)) +
-  geom_bar(stat = "identity") +
-  coord_flip() +
-  geom_text(aes(label = platform_count), size = 2.5, color = "black", hjust = -.5) +
-  labs(x = "Platform", y = "Number of Platforms", title = "Platforms of Video Games for 1996-2016") +
-  theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
-  ylim(0, max(top_platform$platform_count + 100)) +
-  scale_fill_manual(values = fill_purple(colourCount))
+filter(platform_group != "NA") %>% 
+ggplot(aes(x = platform_group, y = platform_count, fill = platform_group)) +
+geom_bar(stat = "identity") +
+coord_flip() +
+geom_text(aes(label = platform_count), size = 2.5, color = "black", hjust = -.5) +
+labs(x = "Platform", y = "Number of Platforms", title = "Platforms of Video Games for 1996-2016") +
+theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) +
+ylim(0, max(top_platform$platform_count + 100)) +
+scale_fill_manual(values = fill_purple(colourCount))
 top_platform_plot
 ```
 
@@ -258,11 +254,13 @@ We want to see if a particular day, month, and/or year stands out as significant
 ```{r Date_Year, tidy=TRUE}
 
 Mon_Yr_Ct <- IGN_data_cleaned %>%
-    group_by(release_month, release_year) %>%
-    summarize(games_per_mon = n()) %>%
-    arrange(desc(games_per_mon))
+group_by(release_month, release_year) %>%
+summarize(games_per_mon = n()) %>%
+arrange(desc(games_per_mon))
 Mon_Yr_Ct %>% 
-  ggplot(aes( x = release_month, y = games_per_mon, fill = release_month)) +
-  geom_bar(stat = "identity") +
-  facet_wrap( ~release_year, ncol = 6)
+ggplot(aes( x = release_month, y = games_per_mon, fill = release_month)) +
+geom_bar(stat = "identity") +
+facet_wrap( ~release_year, ncol = 6)
 ```
+
+
