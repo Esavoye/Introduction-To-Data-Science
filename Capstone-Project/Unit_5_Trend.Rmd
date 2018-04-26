@@ -5,9 +5,20 @@ output:
   pdf_document: default
 ---
 ***
-<br>
+Given the diversity, I would like to determine if, by year and over the years, there is a particular console that is the most popular by use and by average game rating. In addition, I would like to determine if, by year and over the years within reason, there is a particular video game genre that is heralded as the favorite by rating and amount of games within that genre with a positive rating.
 
 
+Key takeaways
+- Show genre by year for the top 5 platforms
+- Genre vs score phrase
+  - score phrase an indicator?
+  - count of scores within each genre for quantity
+  
+- Select last 10 years of data for analysis - seems to be a break/change in the number of games/reviews
+
+
+Data Prep
+The data was previously cleaned up by removing an outlier in release date as well as condensing both platform and genre into more manageable and logical groups in order to analyze the data with sense.
 
 Get going by asking the following questions and looking for the answers with some code and plots:
 
