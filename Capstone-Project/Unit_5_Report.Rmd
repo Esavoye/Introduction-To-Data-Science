@@ -177,13 +177,16 @@ summarize(sum_genres_count = n()) %>%
 arrange(desc(sum_genres_count)) %>% 
 filter(sum_genres_count > 499) 
 top_genre_scores <- top_genre_scores[,1]
+top_genre_scores
+top_vec <- top_genre_scores$genre_group
 
+df <- IGN_data_cleaned[IGN_data_cleaned$genre_group %in% top_vec,]
+df                       
+                       
 colourCount = length(unique(top_genres$genre_group))
 fill_purple <- colorRampPalette(brewer.pal(9,"BuPu"))
 
-top_genres_score_plot <- IGN_data_cleaned %>% 
-filter(top_genre_scores %in% genre_group) %>% 
-ggplot(aes(x = genre_group, y = score, fill = genre_group, color = genre_group)) +
+top_genres_score_plot <- df %>% ggplot(aes(x = genre_group, y = score, fill = genre_group, color = genre_group)) +
 geom_boxplot(alpha = 0.5) +
 labs(x = "Top Genres", y = "Score", title = "Distribution of Scores by Top Genres for 1996-2016") +
 theme(legend.position = "none", plot.title = element_text(hjust = 0.5)) 
