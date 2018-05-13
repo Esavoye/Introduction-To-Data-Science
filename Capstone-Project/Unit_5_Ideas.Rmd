@@ -1,0 +1,44 @@
+---
+title: 'IGN Data: Applying Statistics'
+author: "by Ellen A. Savoye"
+output:
+  pdf_document: default
+---
+***
+<br>
+
+
+After cleaning up my dataset, I moved into applying some exploratory data analysis to unearth some inferences about the data. 
+
+```{r load_data, echo=FALSE, include=FALSE}
+# Load libraries and read IGN CSV file
+
+library("latexpdf")
+library("dplyr")
+library("tidyr")
+library("knitr")
+library("ggplot2")
+
+IGN_data <- read.csv("ign_clean.csv")
+```
+
+
+The plots below are based on all 20 years worth of data. I knew the more positive the score phrase, the better the score. However, I wanted to plot see how far down an "Editor's Choice" game would score. Based on the second graph below, the lowest is approximately an 8. However intersting this fact is, it only goes to show how large the score range is for an "Editor's Choice" game can be.
+```{r score_phrase}
+
+sort(unique(IGN_data$score_phrase))
+
+#Score_vs_Phrase 
+ggplot(data=IGN_data, aes(score)) + 
+  geom_histogram(aes(fill=factor(score_phrase)),bins=80) + 
+  xlab('Score') + 
+  theme(legend.position=c(.2, .6)) + 
+  theme(legend.title=element_blank()) 
+
+#Score_vs_EdChc 
+ggplot(data=IGN_data, aes(score)) +
+  geom_histogram(aes(fill=factor(editors_choice)),bins=80) + 
+  xlab('Score') + theme(legend.position=c(.2, .7)) +
+  theme(legend.title=element_blank()) 
+
+```
