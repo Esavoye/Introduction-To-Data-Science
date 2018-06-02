@@ -146,6 +146,7 @@ plot(energy.mod, which = c(1,2))
 ##   repeat steps 1-3. Is this model significantly better than the model
 ##   with /metro/ as the only predictor?
 
+<<<<<<< HEAD
 ##density
 sts.en.me.density <- subset(subset(states.data, !is.na(metro)), select = c("energy", "metro", "density"))
 summary(sts.en.me.density)
@@ -156,6 +157,18 @@ energy.density.mod <- lm(energy ~ metro + density, data = states.data)
 summary(energy.density.mod)
 plot(energy.density.mod, which = c(1,2))
 anova(energy.mod, energy.density.mod)
+=======
+##population
+sts.en.me.pop <- subset(subset(states.data, !is.na(metro)), select = c("energy", "metro", "pop"))
+summary(sts.en.me.pop)
+cor(sts.en.me.pop)
+plot(sts.en.me.pop)
+
+energy.pop.mod <- lm(energy ~ metro + pop, data = states.data)
+summary(energy.pop.mod)
+plot(energy.pop.mod, which = c(1,2))
+anova(energy.mod, energy.pop.mod)
+>>>>>>> 08c720c17499f6181a8a9ff0727a49f973f73f55
 
 ## waste
 sts.en.me.wa <- subset(subset(states.data, !is.na(metro)), select = c("energy", "metro", "waste"))
