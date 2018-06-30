@@ -42,6 +42,11 @@ library("dplyr")
 library("tidyr")
 library("RColorBrewer")
 library("ggplot2")
+library("caTools")
+library("randomForest")
+library("rpart")
+library("rpart.plot")
+
 
 IGN_data <- read_csv("ign_original.csv")
 
@@ -332,7 +337,7 @@ str(IGN_DC_PredM)
 
 ```
 
-#### Significant Features
+#### Linear Regression
 
 ```{r sig_features, tidy=TRUE}
 
@@ -342,7 +347,27 @@ summary(ScoreReg)
 
 ```
 
-Multicollinearity between score and editor's choice. low R-squared but not sure this is the proper method 
+Multicollinearity between score and editor's choice. low R-squared but not sure this is the proper method/regression for analyzing this data.
+
+#### Random Forest
+
+```{r random_forest, tidy=TRUE}
+
+set.seed(1000)
+
+spl <- sample.split(IGN_DC_PredM$score, SplitRatio = 0.7)
+Train <- subset(IGN_DC_PredM, spl == TRUE)
+Test <- subset(IGN_DC_PredM, spl == FALSE)
+
+# CART
+IGN_Tree <- rpart(score ~ editors_choice.f + platform_group.f + genre_group.f, data = Train, method = "class", minbucket = 25)
+prp(IGN_Tree)
+
+# Random Forest
+IGN_Forest <- randomForest(score ~ editors_choice.f + platform_group.f + genre_group.f, data = Train, nodesize = 25, ntree = 200)
+
+```
+
 
 
 # Conclusion
