@@ -137,6 +137,8 @@ After cleaning up the variables that I will be using in my analysis, I wrote the
 write_csv(IGN_data_v2, "ign_clean.csv")
 IGN_data_cleaned <- read.csv("ign_clean.csv")
 
+IGN_data_cleaned <- IGN_data_cleaned[,-c(1,4)]
+
 ```
 
 ***
@@ -319,19 +321,13 @@ From 1997 - 2008, the number of games released largely increases with 2008 havin
 
 #### Subsetting the Data
 
-Prior to any ventures into modeling, a data set was created to remove any unnecessary features as well as combine release day, month, and year into a combined date field. 
+Prior to any ventures into modeling, a data set was created to remove any unnecessary features and any blank records. 36 records with a 'blank' genre were removed. Given that some of the kept features are categorical, a conversion to binary/dummy variables was needed using model matrix. I chose to not combine release day, month, and year into a combined date field as I don't believe it would have given any valuable insight as unique a combined value. 
 
 ```{r subset_data, tidy=TRUE}
 
-IGN_DC_PredM <- IGN_data_cleaned[,-c(1,3,4,5,7)]
-
-IGN_DC_PredM <- IGN_DC_PredM %>% 
-  unite(release_date, release_day, release_month, release_year, sep="/") 
-
-IGN_DC_PredM$editors_choice.f <- factor(IGN_DC_PredM$editors_choice) 
-IGN_DC_PredM$platform_group.f <- factor(IGN_DC_PredM$platform_group) 
-IGN_DC_PredM$genre_group.f <- factor(IGN_DC_PredM$genre_group) 
-
+sapply(IGN_data_cleaned, function(x) sum(is.na(x)))
+IGN_DC_PredM_WONA <- na.omit(IGN_data_cleaned)
+IGN_DC_PredM <- IGN_data_cleaned[,-c(2,3,5)]
 
 str(IGN_DC_PredM)
 
@@ -341,9 +337,18 @@ str(IGN_DC_PredM)
 
 ```{r sig_features, tidy=TRUE}
 
-ScoreReg <- lm(score ~ editors_choice.f + platform_group.f + genre_group.f, data = IGN_DC_PredM)
+ScoreReg <- lm(score ~., data = IGN_DC_PredM_WONA)
 summary(ScoreReg)
 
+#unique(IGN_DC_PredM$genre_group)
+IGN_MM <- model.matrix(~ editors_choice + platform_group + genre_group, data=IGN_DC_PredM_WONA)
+dim(IGN_MM)
+
+IGN_MM <- cbind(IGN_MM,release_year = IGN_DC_PredM_WONA$release_year,release_month = IGN_DC_PredM_WONA$release_month,release_day = IGN_DC_PredM_WONA$release_day, score = IGN_DC_PredM_WONA$score)
+
+sapply(IGN_DC_PredM_WONA, function(x) sum(is.na(x)))
+IGN_DC_PredM_WONA <- na.omit(IGN_DC_PredM)
+dim(IGN_DC_PredM_WONA)
 
 ```
 
