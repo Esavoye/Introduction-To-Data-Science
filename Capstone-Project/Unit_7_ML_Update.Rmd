@@ -317,7 +317,7 @@ Mon_Yr_Ct %>%
 From 1997 - 2008, the number of games released largely increases with 2008 having the most reviewed and released in video game history. Not so much in the more recent years with more consistent releases over the year, in the prior years, there is the larger amount of released video games in Octover and November over other months. The decreased number of games released could be due to video games becoming significantly more intricate and graphics intensive. With the capailities of T.V. and graphics cards now, immerisive video game graphics seem like a must-have for a game to be released.
 
 ***
-# Predictive Models
+# Predictive Models - Editor's Choice or Not
 
 #### Subsetting the Data
 
@@ -327,36 +327,40 @@ Prior to any ventures into modeling, a data set was created to remove any unnece
 
 sapply(IGN_data_cleaned, function(x) sum(is.na(x)))
 IGN_DC_PredM_WONA <- na.omit(IGN_data_cleaned)
-IGN_DC_PredM <- IGN_data_cleaned[,-c(2,3,5)]
+IGN_DC_PredM <- IGN_DC_PredM_WONA[,-c(2,3,5)]
 
 str(IGN_DC_PredM)
 
+IGN_MM <- model.matrix(~ editors_choice + platform_group + genre_group, data=IGN_DC_PredM)
+dim(IGN_MM)
+
+IGN_MM <- cbind(IGN_MM,release_year = IGN_DC_PredM$release_year,release_month = IGN_DC_PredM$release_month,release_day = IGN_DC_PredM$release_day, score = IGN_DC_PredM$score)
+
+summary(IGN_MM)
 ```
 
 #### Linear Regression
 
 ```{r sig_features, tidy=TRUE}
 
-ScoreReg <- lm(score ~., data = IGN_DC_PredM_WONA)
+set.seed(1000)
+
+ScoreReg <- lm(score ~ . - score_phrase, data = IGN_DC_PredM)
 summary(ScoreReg)
 
-#unique(IGN_DC_PredM$genre_group)
-IGN_MM <- model.matrix(~ editors_choice + platform_group + genre_group, data=IGN_DC_PredM_WONA)
-dim(IGN_MM)
+cor(IGN_DC_PredM)
 
-IGN_MM <- cbind(IGN_MM,release_year = IGN_DC_PredM_WONA$release_year,release_month = IGN_DC_PredM_WONA$release_month,release_day = IGN_DC_PredM_WONA$release_day, score = IGN_DC_PredM_WONA$score)
-
-sapply(IGN_DC_PredM_WONA, function(x) sum(is.na(x)))
-IGN_DC_PredM_WONA <- na.omit(IGN_DC_PredM)
-dim(IGN_DC_PredM_WONA)
 
 ```
 
-Multicollinearity between score and editor's choice. low R-squared but not sure this is the proper method/regression for analyzing this data.
+Previous iterations of the linear regression showed multicollinearity between score and score phrase with a multiple R-squared of 0.9726. After removing score phrase and re-running, R-squared drops to 0.3187.
 
-#### Random Forest
+#### Logistic Regression
 
-```{r random_forest, tidy=TRUE}
+```{r GLM, tidy=TRUE}
+
+table(IGN_DC_PredM$editors_choice)
+
 
 set.seed(1000)
 
@@ -364,12 +368,24 @@ spl <- sample.split(IGN_DC_PredM$score, SplitRatio = 0.7)
 Train <- subset(IGN_DC_PredM, spl == TRUE)
 Test <- subset(IGN_DC_PredM, spl == FALSE)
 
+editchoice <- glm(editors_choice ~ ., data = Train, family = "binomial")
+
+
+```
+
+
+#### Random Forest
+
+```{r random_forest, tidy=TRUE}
+
+
 # CART
-IGN_Tree <- rpart(score ~ editors_choice.f + platform_group.f + genre_group.f, data = Train, method = "class", minbucket = 25)
+IGN_Tree <- rpart(score ~ editors_choice + platform_group + genre_group, data = Train, method = "class", minbucket = 3)
+prp(IGN_Tree)
 prp(IGN_Tree)
 
 # Random Forest
-IGN_Forest <- randomForest(score ~ editors_choice.f + platform_group.f + genre_group.f, data = Train, nodesize = 25, ntree = 200)
+IGN_Forest <- randomForest(score ~ editors_choice + platform_group + genre_group, data = Train, nodesize = 2, ntree = 200)
 
 ```
 
