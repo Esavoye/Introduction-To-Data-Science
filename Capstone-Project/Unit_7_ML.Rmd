@@ -1,0 +1,128 @@
+---
+title: "IGN Video Game Reviews"
+author: "by Ellen A Savoye"
+date: "July 9, 2018"
+output: pdf_document
+subtitle: Machine Learning
+---
+***
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/',
+                      echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+```{r game_reviews data, echo=FALSE, include=FALSE}
+
+library("knitr")
+library("readr")
+library("dplyr")
+library("tidyr")
+library("RColorBrewer")
+library("ggplot2")
+library("caTools")
+library("randomForest")
+library("rpart")
+library("rpart.plot")
+library(caret)
+
+IGN_data_cleaned <- read.csv("ign_clean.csv")
+
+IGN_data_cleaned <- IGN_data_cleaned[,-c(1,4)]
+```
+
+# Predictive Models
+
+#### Subsetting the Data
+
+Prior to any ventures into modeling, a data set was created to remove any unnecessary features and any blank records. 36 records with a 'blank' genre were removed. Given that some of the kept features are categorical, a conversion to binary/dummy variables was needed using model matrix. I chose to not combine release day, month, and year into a combined date field as I don't believe it would have given any valuable insight as unique a combined value. 
+
+```{r subset_data, tidy=TRUE}
+
+sapply(IGN_data_cleaned, function(x) sum(is.na(x)))
+IGN_DC_PredM_WONA <- na.omit(IGN_data_cleaned)
+IGN_DC_PredM <- IGN_DC_PredM_WONA[, c(-1, -2, -3, -5)]
+
+#Let convert time related variable to factor so we can binarize them
+IGN_DC_PredM$release_day   <- as.factor(IGN_DC_PredM$release_day)
+IGN_DC_PredM$release_month <- as.factor(IGN_DC_PredM$release_month)
+IGN_DC_PredM$release_year  <- as.factor(IGN_DC_PredM$release_year)
+
+str(IGN_DC_PredM)
+
+IGN_MM <- model.matrix(~ editors_choice + platform_group + genre_group + release_day + release_month + release_day, data=IGN_DC_PredM)
+
+dim(IGN_MM)
+
+#drop near zero predictor
+nzr <- nearZeroVar(IGN_MM)
+nzr
+IGN_MM <- IGN_MM[, -nzr]
+
+dim(IGN_MM)
+
+#drop highly correlated features
+corel <- cor(IGN_MM)
+highCorrel <- findCorrelation(corel, cutoff = 0.85) #no correlation above 85%. Great!
+highCorrel
+
+#Now let's combine our data for regression analysis.
+reg_data <- cbind(IGN_MM, score = IGN_DC_PredM$score)
+
+Hmisc::describe(reg_data)
+```
+
+#### Linear Regression
+
+```{r sig_features, tidy=TRUE}
+#convert our matrix data to a data frame for ease of use
+reg_data <- as.data.frame(reg_data)
+
+reg_data_v2 <- reg_data[ , c(-2, -9, -13, -18, -25)]
+reg_data_v3 <- reg_data_v2[ , c(-10, -16)]
+
+#make sure column names are compatible with R naming convention
+colnames(reg_data_v3) <- make.names(colnames(reg_data_v3))
+
+ScoreReg_v3 <- lm(score ~., data = reg_data_v3)
+summary(ScoreReg_v3)
+```
+
+The first iteration of the linear regression showed multicollinearity between score and score phrase with a multiple R-squared of 0.9726. After removing score_phrase, R-squared drops to 0.3187. In an attempt to improve R-squared, near zero variance predictors (NZP) were identified and removed because they are non-informative and tend to occur when breaking categorical variables into dummy variables, as was done above. After removing NZP and checking for high collinearity, a few iterations of the linear model were run in order to narrow down which features are not significant. A few of the fields removed are platform_groupApple, genre_groupAdventure, and genre_groupSports. After removing non-significant fields, the adjusted R-squared is now 0.3127. 
+
+#### Training Data Set
+
+
+
+#### CART/Random Forest
+
+```{r random_forest, tidy=TRUE}
+
+set.seed(1000)
+
+spl <- sample.split(reg_data$score, SplitRatio = 0.8)
+Train <- subset(reg_data_v3, spl == TRUE)
+Test <- subset(reg_data_v3, spl == FALSE)
+
+
+# CART
+IGN_Tree <- rpart(score ~., data = Train, method = "class", minbucket = 5)
+prp(IGN_Tree)
+prp(IGN_Tree)
+
+# Random Forest
+IGN_Forest <- randomForest(score ~., data = Train, ntree = 500)
+
+IGN_Forest
+
+preds <- predict(IGN_Forest, Test)
+
+#R-square of the final RF model -> 32.69 %
+cor(preds, Test$score)^2
+
+preds <- predict(IGN_Tree, Test)
+#R-square of the final Tree model -> ~30.4 %
+cor(preds, Test$score)^2
+
+```
+
