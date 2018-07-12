@@ -12,19 +12,19 @@ subtitle: Capstone
 Over the last 20 years, a plethora of video games have been released in an ever-growing market of gaming consoles. In tandem with the creation of these games, a website called IGN began publishing reviews and ratings of the games mentioned above. These reviews and resulting ratings can be analyzed to create insights that would be useful to console and video game creators. With analysis, console and video game creators would be able to determine their market/popularity standing in comparison to other consoles and games. Furthermore, they would be able to determine if there is a particular genre that needs more development to increase their rating and market standpoint. Sourced from Kaggle (<https://www.kaggle.com/egrinstein/20-years-of-games>) and IGN (<http://ign.com/games/reviews>) via a crawl, the data consists of 20 years worth of video game data.
 
 # Caveats
-The data does not contain any financial information relating to the volume of games sold or the monetary amount it was sold for. Any potential insights are solely related to the number of games released, their rating, and the console the game was released on. Some games are released across multiple consoles. I have not adjusted the data to constrain games from multiple platforms down to one.
+The data does not contain any financial information relating to the volume of games sold or the monetary amount it sold for.  Insights are curated based on the number of games released, their rating, the genre, and the console the game was released on. Some games, like 'Gears of War,' have been released on multiple consoles. I have not adjusted the data to constrain these types of games down to one platform.
 
 # The Data
-The data, 20 years' worth of IGN game reviews, consists of 18,625 records. The raw dataset had 10 columns (listed below). 
+The data, 20 years' worth of IGN game reviews, consists of 18,625 records. The raw dataset had ten columns (listed below). 
 
 |Variable|Description|
 |----|----|
-|score_phrase| Phrase given to describe overall score
+|score_phrase| Phrase given to describe the overall score
 |title| Game title 
 |url| IGN Game URL
 |platform| Game Console
 |genre| Video game genre
-|score| Overall rating for video game
+|score| Overall rating for the video game
 |editors_choice| Editor Recommended (Y/N) 
 |release_year| Year of game release
 |release_month| Month of game release
@@ -173,11 +173,11 @@ top_genres %>%
 
 ```
 
-Cumulatively, the top genre is Action followed by Sports, Shooter, Adventure, and Racing. The number of Action games is more than double the next genre, Sports. As I mentioned in the caveats section, this may be due to some games applying across platforms and are therefore counted multiple times. Now that we have the top genres, we can see if there are any insights to glean.
+Cumulatively, the top genre is Action followed by Sports, Shooter, Adventure, and Racing. The number of Action games is more than double the next genre, Sports. As I mentioned in the caveats section, this may be due to some games applying across platforms and therefore counted multiple times. Now that we have the top genres, we can see if there are any insights to glean.
 
 #### Top Genres by Score
 
-Due to a little more than half of the genres having a count of 500+, I'm using 500 as my minimum number of games to filter my data. However, given that 'other' is a catch-all bucket, the mininum will instead be 550 to exclude 'other'.
+Due to a little more than half of the genres having a count of 500+, I'm using 500 as my minimum number of games to filter my data. However, given that 'other' is a catch-all bucket, the minimum will instead be 550 to exclude 'other.'
 
 
 ```{r top_genres_scores, tidy=TRUE}
@@ -205,7 +205,7 @@ subset(genre_scores_df, genre_scores_df$score < 1)
 
 ```
 
-When looking at the distribution of scores for the top 11 genres, we can see that RPG has higher scores than the other genres even though it sits in sixth place for volume of games released. Given the dearth of games released in the Action genre, I expected it to have the higher scores across the board from a slightly volume influenced stand-point. Action, Adventure, and Racing have lower scores with Racing having the largest IQR. Both Action and Racing have games with a score less than 1. Two of the games are in Racing under while the third is in Action.
+When looking at the distribution of scores for the top 11 genres, we can see that RPG has higher ratings than the other genres even though it sits in sixth place for volume of games released. Given the dearth of games released in the Action genre, I expected it to have the higher scores across the board from a slight volume influenced stand-point. Action, Adventure, and Racing have lower scores with Racing having the largest IQR. Both Action and Racing have games with a rating less than 1. Two of the games are in Racing under while the third is in Action.
 
 
 ### Platforms
@@ -238,7 +238,7 @@ top_platform %>%
 
 ```
 
-While some of these platforms have had multiple versions/evolutions over the last 20 years, Nintendo for example, they have been grouped together for a simpler analysis on the major gaming platforms. Even though PlayStation was released after Nintendo, PlayStation is still the top system followed by Nintendo, Windows, and Xbox. Given the previous graph consisting of all 20 years worth of data, I put together a graph showing the last 5 years of data to see if the top systems held consistent.
+While some of these platforms have had multiple versions/evolutions over the last 20 years, Nintendo for example, they have been grouped for a more straightforward analysis on the major gaming platforms. Even though PlayStation launched after Nintendo, PlayStation is still the top system followed by Nintendo, Windows, and Xbox. Given the previous graph consisted of all 20 years worth of data, I put together the last five years of data into a chart to see if the top systems remained consistent.
 
 #### Top Platforms for Past 5 Years
 
@@ -264,7 +264,7 @@ platform_years %>% ggplot(aes(x = platform_group, y = sum_platform_count, fill =
 
 ```
 
-For 2012-2014, Playstation held down the top spot which is consistent with all years combined. However, 2015-2016, Windows is the top platform. So even though Playstation holds the top spot in number of games released overall, it doesn't necessarily hold true on a year-by-year basis.
+For 2012-2014, Playstation held down the top spot which is consistent with all years combined. However, 2015-2016, Windows is the top platform. So even though Playstation holds the top place in the number of games released overall, it doesn't necessarily hold true on a year-by-year basis.
 
 #### Top Platforms by Score
 
@@ -294,10 +294,10 @@ platform_scores_df %>% ggplot(aes(x = platform_group, y = score, fill = platform
 
 ```
 
-Given the number of game releases that Playstation has had, there was some expectation for a better score performance. However, this doesn't appear to be the case. Both Xbox and Windows have higher scores for the 25th, 50th, and 75th IQR values. Windows has the top number of released games for 2015 and 2016, so the higher scores are not completely a surprise.
+Given the number of game releases that Playstation has had, there was some expectation for a better score performance. However, this doesn't appear to be the case. Both Xbox and Windows have higher scores for the 25th, 50th, and 75th IQR values. Windows has the top number of released games for 2015 and 2016, so the higher scores are not wholly a surprise. One thing I've noticed personally is a shift towards computer-based, Windows, games due to the ability to fine-tune graphics cards and speed for better gaming performance.
 
 ### Important Dates
-We want to see if a particular month and year stands out as significant. To do so, I looked at month and year together in a grid.
+We want to see if a particular month and year stand out as significant. To do so, I looked at the month and year together in a grid.
 
 ```{r Date_Year, tidy=TRUE}
 
@@ -317,7 +317,7 @@ Mon_Yr_Ct %>%
   
 ```
 
-From 1997 - 2008, the number of games released largely increases with 2008 having the most reviewed and released in video game history. Not so much in the more recent years with more consistent releases over the year, in the prior years, there is the larger amount of released video games in October and November over other months. The decreased number of games released could be due to video games becoming significantly more intricate and graphics intensive. With the capabilities of T.V. and graphics cards now, immersive video game graphics seem like a must-have for a game to be released.
+From 1997 - 2008, the number of games released continuously increases, with 2008 having the most reviewed and published in video game history. In older years, there is a more significant amount of released video games in October and November over other months. The more recent years have more consistent releases over the course of the year. The decreased number of games released could be due to video games becoming significantly more intricate and graphics intensive. With the capabilities of T.V. and graphics cards now, immersive video game graphics seem like a must-have for a game to be released.
 
 ***
 
@@ -388,10 +388,9 @@ reg_data$release_month7 <- NULL
 
 ScoreReg <- lm(score ~., data = reg_data)
 summary(ScoreReg)
-
 ```
 
-The first iteration of the linear regression showed multicollinearity between score and score phrase with a multiple R-squared of 0.9726. After removing score_phrase, R-squared drops to 0.3187. In an attempt to improve R-squared, near zero variance predictors (NZP) were identified and removed because they are non-informative and tend to occur when breaking categorical variables into dummy variables, as was done above. After removing NZP and checking for high collinearity, a few iterations of the linear model were run in order to narrow down which features are not significant. A few of the fields removed are platform_groupApple, genre_groupAdventure, and genre_groupSports. After removing non-significant fields, the adjusted R-squared is now 0.3127. 
+The first iteration of the linear regression showed multicollinearity between score and score phrase with a multiple R-squared of 0.9726. After removing score_phrase, R-squared drops to 0.3187. In an attempt to improve R-squared, near zero variance predictors (NZP) were identified and discarded because they are non-informative and tend to occur when breaking categorical variables into dummy variables, as was done above. After removing NZP and checking for high collinearity, a few iterations of the linear model were run to narrow down which features are not significant. A few of the fields removed are platform_groupApple, genre_groupAdventure, and genre_groupSports. After eliminating non-significant fields, the adjusted R-squared is now 0.3127. 
 
 #### CART/Random Forest
 
@@ -429,11 +428,16 @@ cor(preds_t_v2, Test$score)^2
 
 ```
 
-When looking at the first tree, the only node shown is for editor's choice. If editor's choice is greater than 0.5, it is no or 1. One important note is that a high score can imply an editor's choice designation. However, a high score, say 8 or greater, does not automatically receive an editor's choice designation. Using the complexity parameter (cp), we can force more nodes to appear with cp = .0025. Looking at the tree, we see that editor's choice has remained as the first node. The first tree produces an R-squared of 30.4% which is similar to the linear regression model. When forcing the tree to have multiple nodes, the same R-squared calculation doesn't work as nicely nor is it the most efficient.
+When looking at the first tree, the only node shown is for editor's choice. If editor's choice is higher than 0.5, it is no or 1. One important note is that a high score can imply an editor's choice designation. However, a high score, say 8 or higher, does not automatically receive an editor's choice designation. Using the complexity parameter (cp), we can force more nodes to appear with cp = .0025. Looking at the tree, we see that editor's choice has remained as the first node. The first tree produces an R-squared of 30.4% which is similar to the linear regression model. When forcing the tree to have multiple nodes, the same R-squared calculation doesn't work as nicely nor is it the most efficient.
 
 The random forest model, built on the training dataset, appears to be the best model based on a comparison of R-squared at 32.69% versus 30.4% (CART), and 31.27% (linear regression).
 
 ***
 
 # Conclusion
-After looking at platform, genre, and release date in a myriad of ways, Action can be conclusively named the top pick in Genre for types of video games released. When looking at Genre by score, RPG is the favorite when it comes to review score.  When looking at the data by Platform, the answer is not as clear. While Playstation dominated for all years combined, even though it was released years after Nintendo or Windows, the exhibit by score does not show PlayStation to have the highest rated games. This would imply that while a platform can release a large amount of games, it does not necessarily mean that those games will be favorably reviewed. To truly determine what platform reigns supreme, if there is one, I would look into tying video game sale data with the video game reviews to look at sale volume versus platform, genre, date, and score.
+
+Between our exploratory data analysis and machine learning models, there are a few takeaways. While the three models don't have high R-squared, this doesn't mean our models are inadequate. The predictor values in each are significant which we can still make important conclusions on. Based on the predictor values, we can see that while specific platforms are significant in their effect on the score, the relationship is negative. Genres RPG and Strategy along with the significant release months have a positive relationship with our score variable. One thing to keep in mind is the human factor. Human opinion influenced the ratings for each game in our source dataset which can make it more challenging to create a precise model. 
+
+The human aspect is one limitation to this analysis. Another limitation is the lack of detail in what went into the determination of scores, other than genre and console, for each review: i.e., graphics rating, storyline, etc. 
+
+Based on my findings, I would recommend an additional study be performed incorporating more information regarding score determination as well as financial information relating to each game: sales volume, cost of each game, etc. The additional information will, theoretically, provide more detail to aid in accurately predicting video game rating and how they stack up to each other in the market.
