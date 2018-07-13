@@ -1,6 +1,6 @@
 ---
 title: "IGN Video Game Reviews"
-author: "by Ellen A Savoye"
+author: "Ellen A Savoye"
 date: "July 12, 2018"
 output: pdf_document
 subtitle: Capstone
@@ -143,7 +143,7 @@ IGN_data_cleaned <- IGN_data_cleaned[,-c(1,4)]
 ***
 # Exploratory Data Analysis
 
-### Genre
+## Genre
 
 Using the condensed genre field, I'm looking to see what the top genres are regarding the number of video game releases and whether or not the scores correspond to the top genres.
 
@@ -208,7 +208,7 @@ subset(genre_scores_df, genre_scores_df$score < 1)
 When looking at the distribution of scores for the top 11 genres, we can see that RPG has higher ratings than the other genres even though it sits in sixth place for volume of games released. Given the dearth of games released in the Action genre, I expected it to have the higher scores across the board from a slight volume influenced stand-point. Action, Adventure, and Racing have lower scores with Racing having the largest IQR. Both Action and Racing have games with a rating less than 1. Two of the games are in Racing under while the third is in Action.
 
 
-### Platforms
+## Platforms
 
 I want to see which platform reigned supreme over the last twenty years and if that holds true when looking at the past five years.
 
@@ -327,8 +327,9 @@ From 1997 - 2008, the number of games released continuously increases, with 2008
 
 Before any ventures into modeling, a data set was created to remove any unnecessary features and any blank records. 36 records with a 'blank' genre were removed. Given that some of the kept features are categorical, conversion to binary/dummy variables was needed using a model matrix. I chose not to combine release day, month, and year into a combined date field as I don't believe it would have given any valuable insight as unique a combined value. 
 
-```{r subset_data, tidy=TRUE}
 
+```{r subset_data, tidy=TRUE}
+# Check for blank/NA records
 sapply(IGN_data_cleaned, function(x) sum(is.na(x)))
 IGN_DC_PredM_WONA <- na.omit(IGN_data_cleaned)
 IGN_DC_PredM <- IGN_DC_PredM_WONA[, c(-1, -2, -3, -5)]
@@ -338,29 +339,30 @@ IGN_DC_PredM$release_day   <- as.factor(IGN_DC_PredM$release_day)
 IGN_DC_PredM$release_month <- as.factor(IGN_DC_PredM$release_month)
 IGN_DC_PredM$release_year  <- as.factor(IGN_DC_PredM$release_year)
 
-str(IGN_DC_PredM)
+# str(IGN_DC_PredM)
 
 IGN_MM <- model.matrix(~ editors_choice + platform_group + genre_group + release_day + release_month + release_day, data=IGN_DC_PredM)
 
-dim(IGN_MM)
+# dim(IGN_MM)
 
 #drop near zero predictor
 nzr <- nearZeroVar(IGN_MM)
-nzr
+# nzr
 IGN_MM <- IGN_MM[, -nzr]
 
-dim(IGN_MM)
+# dim(IGN_MM)
 
 #drop highly correlated features
 corel <- cor(IGN_MM)
 highCorrel <- findCorrelation(corel, cutoff = 0.85) #no correlation above 85%. Great!
-highCorrel
+# highCorrel
 
 #Now let's combine our data for regression analysis.
 reg_data <- cbind(IGN_MM, score = IGN_DC_PredM$score)
 
-Hmisc::describe(reg_data)
+# Hmisc::describe(reg_data)
 ```
+
 
 #### Linear Regression
 
