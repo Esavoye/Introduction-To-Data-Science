@@ -1,6 +1,6 @@
 ---
 title: "IGN Video Game Reviews"
-author: "Ellen A Savoye"
+author: "Ellen A. Savoye"
 date: "July 14, 2018"
 output: pdf_document
 subtitle: Capstone
