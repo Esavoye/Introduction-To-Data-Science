@@ -1,0 +1,114 @@
+genre,genre_group
+Action,Action
+"Action, Adventure",Action
+"Action, Compilation",Action
+"Action, Editor",Action
+"Action, Platformer",Action
+"Action, Puzzle",Action
+"Action, RPG",Action
+"Action, Simulation",Action
+"Action, Strategy",Action
+"Adult, Card",Cards
+Adventure,Adventure
+"Adventure, Adult",Adventure
+"Adventure, Adventure",Adventure
+"Adventure, Compilation",Adventure
+"Adventure, Episodic",Adventure
+"Adventure, Platformer",Adventure
+"Adventure, RPG",Adventure
+Baseball,Sports
+Battle,Other
+Board,Other
+"Board, Compilation",Compilation
+Card,Cards
+"Card, Battle",Cards
+"Card, Compilation",Cards
+"Card, RPG",Cards
+Casino,Other
+Compilation,Compilation
+"Compilation, Compilation",Compilation
+"Compilation, RPG",Compilation
+Educational,Education
+"Educational, Action",Action
+"Educational, Adventure",Adventure
+"Educational, Card",Cards
+"Educational, Productivity",Education
+"Educational, Puzzle",Education
+"Educational, Simulation",Education
+"Educational, Trivia",Education
+Fighting,Fighting
+"Fighting, Action",Action
+"Fighting, Adventure",Adventure
+"Fighting, Compilation",Compilation
+"Fighting, RPG",Fighting
+"Fighting, Simulation",Fighting
+Flight,Flight
+"Flight, Action",Action
+"Flight, Racing",Flight
+"Flight, Simulation",Flight
+Hardware,Other
+Hunting,Hunting
+"Hunting, Action",Action
+"Hunting, Simulation",Hunting
+Music,Music
+"Music, Action",Action
+"Music, Adventure",Adventure
+"Music, Compilation",Compilation
+"Music, Editor",Music
+"Music, RPG",Music
+Other,Other
+"Other, Action",Action
+"Other, Adventure",Adventure
+Party,Other
+Pinball,Pinball
+"Pinball, Compilation",Compilation
+Platformer,Platformer
+"Platformer, Action",Action
+"Platformer, Adventure",Adventure
+Productivity,Productivity
+"Productivity, Action",Action
+Puzzle,Puzzle
+"Puzzle, Action",Action
+"Puzzle, Adventure",Adventure
+"Puzzle, Compilation",Compilation
+"Puzzle, Platformer",Platformer
+"Puzzle, RPG",Puzzle
+"Puzzle, Word Game",Puzzle
+Racing,Racing
+"Racing, Action",Action
+"Racing, Compilation",Compilation
+"Racing, Editor",Racing
+"Racing, Shooter",Racing
+"Racing, Simulation",Racing
+RPG,RPG
+"RPG, Action",Action
+"RPG, Compilation",Compilation
+"RPG, Editor",RPG
+"RPG, Simulation",RPG
+Shooter,Shooter
+"Shooter, Adventure",Adventure
+"Shooter, First-Person",Shooter
+"Shooter, Platformer",Platformer
+"Shooter, RPG",RPG
+Simulation,Simulation
+"Simulation, Adventure",Adventure
+Sports,Sports
+"Sports, Action",Action
+"Sports, Baseball",Sports
+"Sports, Compilation",Sports
+"Sports, Editor",Sports
+"Sports, Fighting",Sports
+"Sports, Golf",Sports
+"Sports, Other",Sports
+"Sports, Party",Sports
+"Sports, Racing",Sports
+"Sports, Simulation",Sports
+Strategy,Strategy
+"Strategy, Compilation",Compilation
+"Strategy, RPG",RPG
+"Strategy, Simulation",Simulation
+Trivia,Other
+Virtual Pet,Other
+Wrestling,Wrestling
+"Wrestling, Simulation",Simulation
+,Other
