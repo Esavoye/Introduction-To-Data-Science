@@ -443,3 +443,4 @@ Between our exploratory data analysis and machine learning models, there are a f
 The human aspect is one limitation to this analysis. Another limitation is the lack of detail in what went into the determination of scores, other than genre and console, for each review: i.e., graphics rating, storyline, etc. 
 
 Based on my findings, I would recommend an additional study be performed incorporating more information regarding score determination as well as financial information relating to each game: sales volume, cost of each game, etc. The additional information will, theoretically, provide more detail to aid in accurately predicting video game rating and how they stack up to each other in the market.
+  
